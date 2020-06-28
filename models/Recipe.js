@@ -8,6 +8,7 @@ const recipeSchema = new Schema ({
         offer : {type: Number, default: null},
         star: {type: Boolean, default: false},
         new: {type: Boolean, default: false},
+        ingredients: [{type: Schema.Types.ObjectId, ref: 'Ingredient'}],
 })
 
 const Recipe = mongoose.model ("Recipe",recipeSchema);
