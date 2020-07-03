@@ -23,27 +23,24 @@ router.get ("/ingredients/:id", (req, res) => {
         });
 });
 
-router.post ("/ingredients", upload.single('photo'), (req, res) => {
-        const {name, price} = req.body;
-        const image = req.file.secure_url
-        const newIngredient = {name, price, image};
-
-
-        Ingredient.findOne({name}).then((ingredientFound) => {
-                if (ingredientFound) {
-                        return res.status(400).json({message: "Ingredient already in the list !"})
-                }
-        })
-
+router.post("/ingredients", upload.single("image"), (req, res) => {
+        const { name, price } = req.body;
+        const newIngredient = { name, price };
+      
+        if (req.file) {
+          newIngredient.image = req.file.secure_url;
+        }
+      
+        console.log("new image", newIngredient);
         Ingredient.create(newIngredient)
-        .then((ingredientAdded) => {
-                console.log("Ingredient succefully added !");
-                res.status(200).json(ingredientAdded);
-        })
-        .catch((err) => {
-                res.status(500).json(err);
-        });
-})
+          .then((Tattoobook) => {
+            console.log("successfully created");
+            res.status(201).json(Tattoobook);
+          })
+          .catch((err) => {
+            res.status(500).json(err);
+          });
+      });
 
 router.patch ("/ingredients/:id", (req, res) => {
         Ingredient.findByIdAndUpdate(req.params.id, req.body, {new: true})
