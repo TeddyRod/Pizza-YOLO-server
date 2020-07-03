@@ -1,8 +1,9 @@
 const express = require ("express");
 const router = express.Router();
-const Ingredient = require ("../models/Ingredient");
+const Ingredient = require ("../models/IngredientModel");
+const upload = require('../config/cloudinary');
 
-router.get ("/api/ingredients", (req, res) => {
+router.get ("/ingredients", (req, res) => {
         Ingredient.find()
         .then((IngredientsList) => {
                 res.status(200).json(IngredientsList);
@@ -12,7 +13,7 @@ router.get ("/api/ingredients", (req, res) => {
         });
 });
 
-router.get ("/api/ingredients", (req, res) => {
+router.get ("/ingredients/:id", (req, res) => {
         Ingredient.findById(req.params.id)
         .then((IngredientsList) => {
                 res.status(200).json(IngredientsList);
@@ -22,9 +23,10 @@ router.get ("/api/ingredients", (req, res) => {
         });
 });
 
-router.post ("/api/ingredients", (req, res) => {
+router.post ("/ingredients", upload.single('photo'), (req, res) => {
         const {name, price} = req.body;
-        const newIngredient = {name, price};
+        const image = req.file.secure_url
+        const newIngredient = {name, price, image};
 
 
         Ingredient.findOne({name}).then((ingredientFound) => {
@@ -43,7 +45,7 @@ router.post ("/api/ingredients", (req, res) => {
         });
 })
 
-router.patch ("/api/ingredients/:id", (req, res) => {
+router.patch ("/ingredients/:id", (req, res) => {
         Ingredient.findByIdAndUpdate(req.params.id, req.body, {new: true})
         .then((ingredientUpdated) => {
                 res.status(200).json(ingredientUpdated);
@@ -53,7 +55,7 @@ router.patch ("/api/ingredients/:id", (req, res) => {
         })
 });
 
-router.delete ("/api/ingredients/:id", (req, res) => {
+router.delete ("/ingredients/:id", (req, res) => {
         Ingredient.findByIdAndDelete(req.params.id)
         .then((ingredientDeleted) => {
                 res.status(204).json(ingredientDeleted);

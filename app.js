@@ -41,7 +41,7 @@ app.use(function(req, res, next) {
 // Routes
 const indexRouter = require ("./routes/index");
 const authRouter = require ("./routes/auth");
-const ingredientRouter = require ("./routes/ingredients")
+const ingredientRouter = require ("./routes/ingredientsRoute");
 
 app.use("/", indexRouter);
 app.use("/", authRouter);

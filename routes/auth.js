@@ -1,11 +1,11 @@
 const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcrypt");
-const User = require("../models/User");
+const User = require("../models/UserModel");
 
 const salt = 10;
 
-router.post("/api/signin", (req, res, next) => {
+router.post("/signin", (req, res, next) => {
   const { email, password } = req.body;
   User.findOne({ email }).then((userDocument) => {
     if (!userDocument) {
@@ -22,7 +22,7 @@ router.post("/api/signin", (req, res, next) => {
   });
 });
 
-router.post("/api/signup", (req, res, next) => {
+router.post("/signup", (req, res, next) => {
   const { email, password, firstName, lastName } = req.body;
 
   User.findOne({ email }).then((userDocument) => {
@@ -42,7 +42,7 @@ router.post("/api/signup", (req, res, next) => {
   });
 });
 
-router.get("/api/isLoggedIn", (req, res, next) => {
+router.get("/isLoggedIn", (req, res, next) => {
   if (req.session.currentUser) {
     const id = req.session.currentUser._id;
     User.findById(id)
@@ -59,7 +59,7 @@ router.get("/api/isLoggedIn", (req, res, next) => {
   }
 });
 
-router.get("/api/logout", (req, res, next) => {
+router.get("/logout", (req, res, next) => {
   req.session.destroy(function (error) {
     if (error) res.status(500).json(error);
     else res.status(200).json({ message: "Succesfully disconnected." });
