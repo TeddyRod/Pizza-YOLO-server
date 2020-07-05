@@ -2,10 +2,12 @@ const express = require ("express");
 const router = express.Router();
 const Ingredient = require ("../models/IngredientModel");
 const upload = require('../config/cloudinary');
+const chalk = require('chalk');
 
 router.get ("/ingredients", (req, res) => {
         Ingredient.find()
         .then((IngredientsList) => {
+                console.log(chalk.green(`Ingredients collection is loaded`))
                 res.status(200).json(IngredientsList);
         })
         .catch((err) => {
@@ -15,8 +17,9 @@ router.get ("/ingredients", (req, res) => {
 
 router.get ("/ingredients/:id", (req, res) => {
         Ingredient.findById(req.params.id)
-        .then((IngredientsList) => {
-                res.status(200).json(IngredientsList);
+        .then((oneIngredient) => {
+                console.log(chalk.gray.bgGreen(` ${oneIngredient.name} `) + chalk.green(` is loaded`))
+                res.status(200).json(oneIngredient);
         })
         .catch((err) => {
                 res.status(500).json(err);
@@ -33,9 +36,9 @@ router.post("/ingredients", upload.single("image"), (req, res) => {
       
         console.log("new image", newIngredient);
         Ingredient.create(newIngredient)
-          .then((Tattoobook) => {
-            console.log("successfully created");
-            res.status(201).json(Tattoobook);
+          .then((oneIngredient) => {
+            console.log(chalk.gray.bgGreen(` ${oneIngredient.name} `) + ` successfully` + chalk.green(` added +`));
+            res.status(201).json(oneIngredient);
           })
           .catch((err) => {
             res.status(500).json(err);
@@ -44,8 +47,9 @@ router.post("/ingredients", upload.single("image"), (req, res) => {
 
 router.patch ("/ingredients/:id", (req, res) => {
         Ingredient.findByIdAndUpdate(req.params.id, req.body, {new: true})
-        .then((ingredientUpdated) => {
-                res.status(200).json(ingredientUpdated);
+        .then((oneIngredient) => {
+                console.log(chalk.gray.bgGreen(`${oneIngredient.name}`) + ` successfully` + chalk.yellow(` patched ^`))
+                res.status(200).json(oneIngredient);
         })
         .catch((err) => {
                 res.status(500).json(err);
@@ -54,8 +58,9 @@ router.patch ("/ingredients/:id", (req, res) => {
 
 router.delete ("/ingredients/:id", (req, res) => {
         Ingredient.findByIdAndDelete(req.params.id)
-        .then((ingredientDeleted) => {
-                res.status(204).json(ingredientDeleted);
+        .then((oneIngredient) => {
+                console.log(chalk.gray.bgGreen(`${oneIngredient.name}`) + ` successfully` + chalk.red(` deleted -`))
+                res.status(204).json(oneIngredient);
         })
         .catch((err) => {
                 res.status(500).json(err);

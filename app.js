@@ -42,10 +42,12 @@ app.use(function(req, res, next) {
 const indexRouter = require ("./routes/index");
 const authRouter = require ("./routes/auth");
 const ingredientRouter = require ("./routes/ingredientsRoute");
+const recipeRouter = require ("./routes/recipesRoute")
 
 app.use("/", indexRouter);
 app.use("/", authRouter);
 app.use("/", ingredientRouter);
+app.use(('/', recipeRouter));
 
 // Export the app.js
 module.exports = app;
