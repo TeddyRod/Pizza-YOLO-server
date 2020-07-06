@@ -8,7 +8,7 @@ router.get ("/recipes", (req, res) => {
         Recipe.find()
         .populate("ingredients")
         .then((recipeList) => {
-                console.log(chalk.green(`recipe collection is loaded`))
+                console.log(' => ' + chalk.green(`recipe collection is loaded`))
                 res.status(200).json(recipeList);
         })
         .catch((err) => {
@@ -20,7 +20,7 @@ router.get ("/recipes/:id", (req, res) => {
         Recipe.findById(req.params.id)
         .populate("ingredients")
         .then((oneRecipe) => {
-                console.log(chalk.gray.bgGreen(` ${oneRecipe.name} `) + chalk.green(` is loaded`))
+                console.log(chalk.gray.bold.bgGreen(` ${oneRecipe.name} `) + chalk.green(` is loaded`))
                 res.status(200).json(oneRecipe);
         })
         .catch((err) => {
@@ -41,22 +41,23 @@ router.post("/recipes", upload.single("image"), (req, res) => {
                 newRecipe.ingredients = [];
                 newRecipe.ingredients.push(req.body.ingredients);
         }
-      
-        console.log("new image", newRecipe);
+            
         Recipe.create(newRecipe)
           .then((oneRecipe) => {
-            console.log(chalk.gray.bgGreen(` ${oneRecipe.name} `) + ` successfully` + chalk.green(` added +`));
-            res.status(201).json(oneRecipe);
+                console.log(chalk.gray.bgGreen(` ${oneRecipe.name} `) + ` successfully` + chalk.green(` added+`) + ' with the _id : ' + chalk.bold.blue(`${oneRecipe._id}`));
+                res.status(201).json(oneRecipe);
           })
           .catch((err) => {
             res.status(500).json(err);
           });
       });
 
-router.patch ("/recipes/:id", (req, res) => {
-        Recipe.findByIdAndUpdate(req.params.id, req.body, {new: true})
+router.patch ("/recipes/:id", upload.single("image"), (req, res) => {
+      
+        Recipe.findByIdAndUpdate(req.params.id, req.body)
+
         .then((oneRecipe) => {
-                console.log(chalk.gray.bgGreen(`${oneRecipe.name}`) + ` successfully` + chalk.yellow(` patched ^`))
+                console.log(chalk.gray.bold.bgGreen(` ${oneRecipe.name} `) + ` successfully` + chalk.yellow(` patched ^`))
                 res.status(200).json(oneRecipe);
         })
         .catch((err) => {
@@ -67,7 +68,7 @@ router.patch ("/recipes/:id", (req, res) => {
 router.delete ("/recipes/:id", (req, res) => {
         Recipe.findByIdAndDelete(req.params.id)
         .then((oneRecipe) => {
-                console.log(chalk.gray.bgGreen(`${oneRecipe.name}`) + ` successfully` + chalk.red(` deleted -`))
+                console.log(chalk.gray.bold.bgGreen(` ${oneRecipe.name} `) + ` successfully` + chalk.red(` deleted -`))
                 res.status(204).json(oneRecipe);
         })
         .catch((err) => {
