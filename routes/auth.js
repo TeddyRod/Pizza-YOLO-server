@@ -37,7 +37,7 @@ router.post("/signup", (req, res, next) => {
     User.create(newUser).then((newUserDocument) => {
       const userObj = newUserDocument.toObject();
       delete userObj.password;
-      console.log(' => New User with ' + chalk.gray.bgRed(` ${newUserDocument.role}.role `) + ` successfully` + chalk.green(` added+`) + ' with the _id : ' + chalk.bold.blue(`${newUserDocument._id}`));
+      console.log(' => New User with ' + chalk.gray.bold.bgRed(` ${newUserDocument.role}.role `) + ` successfully` + chalk.green(` added+`) + ' with the _id : ' + chalk.bold.blue(`${newUserDocument._id}`));
       req.session.currentUser = userObj;
       res.status(201).json(userObj);
     });
